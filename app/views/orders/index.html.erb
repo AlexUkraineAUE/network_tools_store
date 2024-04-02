@@ -4,3 +4,5 @@
     <li><%= link_to "Order ##{order.id}", order %></li>
   <% end %>
 </ul>
+
+<%= paginate @orders %>
