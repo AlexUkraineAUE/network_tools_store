@@ -1,8 +1,0 @@
-<h1 class="title is-1">Products</h1>
-<ul>
-  <% @products.each do |product| %>
-    <li><%= link_to product.name, product %></li>
-  <% end %>
-</ul>
-
-<%= paginate @products %>

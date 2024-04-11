@@ -1,8 +1,0 @@
-<h1 class="title is-1">Orders</h1>
-<ul>
-  <% @orders.each do |order| %>
-    <li><%= link_to "Order ##{order.id}", order %></li>
-  <% end %>
-</ul>
-
-<%= paginate @orders %>
