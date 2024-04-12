@@ -1,0 +1,7 @@
+<h1 class="title is-1"><%= @category.name %></h1>
+<h2 class="title is-2">Below products are classified as <%= @category.name %></h2>
+<ul>
+  <% @products.each do |product| %>
+    <li><%= link_to product.name, product_path(product) %></li>
+  <% end %>
+</ul>
