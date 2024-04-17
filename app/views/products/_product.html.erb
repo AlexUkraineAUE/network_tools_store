@@ -1,0 +1,36 @@
+<div class="column">
+  <div class="card">
+    <div class="card-content">
+      <p class="title is-1">
+        <% if show_link %>
+          <%= link_to product.name, product %>
+        <% else %>
+          <%= product.name %>
+        <% end %>
+      </p>
+      <p>Category: <%= link_to product.category.name,product.category %></p>
+    </div>
+    <footer class="card-footer">
+      <p class="card-footer-item">
+        Description: <br><%=product.description %>
+      </p>
+      <p class="card-footer-item">
+        Price: <br><%= number_to_currency(product.price) %>
+      </p>
+      <p> <% if @product.discounted_price.present? %>
+            Discounted Price: <%= number_to_currency(@product.discounted_price) %>
+            <% end %>
+        </p>
+      <p class="card-footer-item">
+        Quantity in stock: <br><%=product.quantity %>
+      </p>
+      <% if @product.image.present? %>
+        <div class="card-image">
+            <figure class="image">
+            <%= image_tag @product.image%> 
+            </figure>
+        </div>
+    <% end %>
+    </footer>
+  </div>
+</div>

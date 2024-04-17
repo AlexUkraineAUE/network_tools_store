@@ -1,4 +1,8 @@
 Rails.application.routes.draw do
+  root to: 'home#index'
+  get 'home/index'
+  get 'pages/contact'
+  get 'pages/about'
   devise_for :admin_users, ActiveAdmin::Devise.config
   ActiveAdmin.routes(self)
 
@@ -19,6 +23,9 @@ Rails.application.routes.draw do
   get 'products', to: 'products#index'
   get 'customers', to: 'customers#index'
   get 'order_items', to: 'order_items#index'
+  get 'contact', to: 'pages#contact'
+  get 'about', to: 'pages#about'
+  get 'home', to: 'home#index'
 
   resources :orders, only: [:index, :show] do
     collection do
@@ -37,6 +44,7 @@ Rails.application.routes.draw do
       get "search"
     end
   end
+  resources :contacts, only: [:create]
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 

@@ -1,0 +1,18 @@
+<%= form_with(model: @contact, url: contacts_path, method: :post) do |form| %>
+  <div class="field">
+    <%= form.label :name %>
+    <%= form.text_field :name, required: true %>
+  </div>
+  
+  <div class="field">
+    <%= form.label :email %>
+    <%= form.email_field :email, required: true %>
+  </div>
+  
+  <div class="field">
+    <%= form.label :message %>
+    <%= form.text_area :message, required: true %>
+  </div>
+  
+  <%= form.submit "Submit", class: "button" %>
+<% end %>
