@@ -1,11 +1,45 @@
+require 'csv'
 require 'faker'
 
-Customer.destroy_all
-Category.destroy_all
-Product.destroy_all
-Order.destroy_all
-OrderItem.destroy_all
-AdminUser.destroy_all
+Customer.delete_all
+Category.delete_all
+Product.delete_all
+Order.delete_all
+OrderItem.delete_all
+AdminUser.delete_all
+
+# Fetch the file
+filename = Rails.root.join("db/store_data.csv")
+
+puts "Loading data from the CSV file #{filename}"
+
+csv_data = File.read(filename)
+products = CSV.parse(csv_data, headers: true, encoding: "utf-8")
+
+products.each do |p|
+  category = Category.find_or_create_by(name: p["category"])
+  puts "Invalid category #{p['category']}: #{category.errors.full_messages.join(', ')}" unless category&.valid?
+
+  if category && category.valid?
+    product = category.products.create(
+      name: p["name"],
+      description: Faker::Lorem.paragraph,
+      price: p["actual_price"],
+      discounted_price: p["discount_price"],
+      quantity: Faker::Number.positive
+    )
+
+    query = URI.encode_www_form_component([product.name, category.name].join(","))
+    downloaded_image = URI.open("https://source.unsplash.com/600x600/?#{query}")
+    product.image.attach(io: downloaded_image, filename: "m-#{product.name}.jpg")
+    sleep(1)
+
+    unless product.valid?
+      puts "Invalid product #{p['name']}"
+      next
+    end
+  end
+end
 
 15.times do
   first_name = Faker::Name.first_name
@@ -26,37 +60,7 @@ AdminUser.destroy_all
     province: province,
     postal_code: postal_code,
     phone_number: phone_number
-
   )
-end
-
-10.times do
-  Category.create(
-    name: Faker::Commerce.department
-  )
-end
-
-100.times do
-
-  name = Faker::Commerce.product_name
-  description = Faker::Lorem.paragraph
-  price = Faker::Commerce.price(range: 10.0..100.0)
-  category_id = Category.pluck(:id).sample
-  quantity = Faker::Number.positive
-
-  product = Product.create(
-    name: name,
-    description: description,
-    price: price,
-    category_id: category_id,
-    quantity: quantity
-  )
-
-  query = URI.encode_www_form_component([product.name].join(","))
-  downloaded_image = URI.open("https://source.unsplash.com/600x600/?#{query}")
-  product.image.attach(io:downloaded_image, filename: "m-#{[product.name].join("-")}.jpg")
-  sleep(1)
-
 end
 
 20.times do
@@ -75,4 +79,10 @@ end
     )
   end
 end
+
+puts "Created #{Category.count} Categories"
+puts "Created #{Product.count} Products"
+puts "Created #{Customer.count} Customers"
+puts "Created #{Order.count} Orders"
+
 AdminUser.create!(email: 'admin@example.com', password: 'password', password_confirmation: 'password') if Rails.env.development?
