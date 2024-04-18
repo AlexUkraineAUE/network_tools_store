@@ -18,6 +18,10 @@ products = CSV.parse(csv_data, headers: true, encoding: "utf-8")
 
 products.each do |p|
   category = Category.find_or_create_by(name: p["category"])
+  query = URI.encode_www_form_component(category.name)
+  downloaded_image = URI.open("https://source.unsplash.com/600x600/?#{query}")
+  product.image.attach(io: downloaded_image, filename: "m-#{category.name}.jpg")
+  sleep(1)
   puts "Invalid category #{p['category']}: #{category.errors.full_messages.join(', ')}" unless category&.valid?
 
   if category && category.valid?

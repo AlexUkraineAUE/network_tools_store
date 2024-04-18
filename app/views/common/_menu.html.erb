@@ -1,7 +1,20 @@
-<nav class="navbar">
-<div class="navbar-menu">
-    <div class="navbar-start">
+<nav class="navbar is-fixed-top" role="navigation" aria-label="main navigation">
+  <div class="navbar-brand">
+    <a class="navbar-item">
+      <%= image_tag "abstract-background-with-low-poly-design-0.jpg", alt: "Logo", class: "navbar-logo" %>
+    </a>
+    <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+    </a>
+  </div>
 
+  <div class="navbar-menu">
+    <div class="navbar-start">
       <a class="navbar-item">
         <%= link_to 'Home', root_path %>
       </a>
@@ -25,7 +38,6 @@
       <a class="navbar-item">
         <%= link_to 'Contact Us', contact_path %>
       </a>
-
-      </div>
     </div>
+  </div>
 </nav>

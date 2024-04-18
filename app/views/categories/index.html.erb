@@ -1,8 +1,28 @@
 <h1 class="title is-1">Categories</h1>
-<ul>
-  <% @categories.each do |category| %>
-    <li><%= link_to category.name, category_path(category) %></li>
-  <% end %>
-</ul>
 
-<%= paginate @categories %>
+<div class="grid">
+  <div class="columns is-multiline">
+    <% @categories.each do |category|%>
+      <div class="column is-one-third">
+        <div class="cell">
+          <div class="card">
+              <div class="card-header">
+                <p class="card-header-title">
+                    <%= link_to category.name, category_path(category) %>
+                </p>
+             </div>
+             <div class="card-image">
+                 <% if category.image.present? %>
+                  <div class="card-image">
+                    <figure class="image">
+                      <%= image_tag category.image%> 
+                    </figure>
+                 </div>
+                <% end %>
+              </div>
+            </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>

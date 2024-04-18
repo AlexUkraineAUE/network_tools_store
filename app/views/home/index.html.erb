@@ -1,1 +1,11 @@
-<h1 class="title is-1">Welcome to Our Website!</h1>
+<div class="container">
+  <h1 class="title is-1 has-text-centered">Welcome to Our Website!</h1>
+  <div class="hero is-medium">
+    <%= image_tag "WT1.jpg", alt: "Home Image", class: "home-image is-centered" %>
+    <%= image_tag "WT2.jpg", alt: "Home Image", class: "home-image is-centered" %>
+  </div>
+  <div class="buttons is-centered">
+    <%= link_to "Browse Categories", categories_path, class: "button is-primary is-medium" %>
+    <%= link_to "Browse All Products", products_path, class: "button is-primary is-medium" %>
+  </div>
+</div>
