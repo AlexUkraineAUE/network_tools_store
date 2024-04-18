@@ -2,11 +2,15 @@ class ProductsController < ApplicationController
   before_action :set_product, only: [:show, :edit, :update, :destroy]
 
   def index
-    @products = Product.page(params[:page]).per(20)
+    @products = Product.page(params[:page]).per(12)
   end
 
   def show
     @product = Product.find(params[:id])
+  end
+
+  def search
+    @products = Product.where("name LIKE ?", "%#{params[:search_term]}%")
   end
 
   def permalink

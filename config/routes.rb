@@ -1,11 +1,11 @@
 Rails.application.routes.draw do
+
+  devise_for :admin_users, ActiveAdmin::Devise.config
+  ActiveAdmin.routes(self)
   root to: 'home#index'
   get 'home/index'
   get 'pages/contact'
   get 'pages/about'
-  devise_for :admin_users, ActiveAdmin::Devise.config
-  ActiveAdmin.routes(self)
-
   get 'order_items/index'
   get 'order_items/show'
   get 'orders/index'
@@ -34,7 +34,7 @@ Rails.application.routes.draw do
   end
   resources :categories, only: [:index, :show]
   resources :order_items, only: [:index, :show]
-  resources :products, only: [:index, :show] do
+  resources :products, only: :show do
     collection do
       get "search"
     end

@@ -1,36 +1,44 @@
-<div class="column">
+<div class="cell">
   <div class="card">
-    <div class="card-content">
-      <p class="title is-1">
+    <div class="card-header">
+      <p class="card-header-title">
         <% if show_link %>
           <%= link_to product.name, product %>
         <% else %>
           <%= product.name %>
         <% end %>
       </p>
-      <p>Category: <%= link_to product.category.name,product.category %></p>
     </div>
-    <footer class="card-footer">
-      <p class="card-footer-item">
+
+    <div class="card-content">
+      <p class="content">Category: <%= link_to product.category.name,product.category %></p>
+    
+      <p class="content">
         Description: <br><%=product.description %>
       </p>
-      <p class="card-footer-item">
+      <p class="content">
         Price: <br><%= number_to_currency(product.price) %>
       </p>
-      <p> <% if @product.discounted_price.present? %>
-            Discounted Price: <%= number_to_currency(@product.discounted_price) %>
-            <% end %>
+      <p class="content"> 
+        <% if product.discounted_price.present? %>
+            Discounted Price: <br><%= number_to_currency(product.discounted_price) %>
+        <% else %>
+        <% end %>
         </p>
-      <p class="card-footer-item">
+      <p class="content">
         Quantity in stock: <br><%=product.quantity %>
       </p>
-      <% if @product.image.present? %>
+
+    </div>
+
+    <div class="card-image">
+      <% if product.image.present? %>
         <div class="card-image">
             <figure class="image">
-            <%= image_tag @product.image%> 
+            <%= image_tag product.image%> 
             </figure>
         </div>
     <% end %>
-    </footer>
+     </div>
   </div>
 </div>

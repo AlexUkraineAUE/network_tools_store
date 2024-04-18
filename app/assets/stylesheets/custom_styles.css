@@ -1,0 +1,12 @@
+.product-card {
+    width: 25%; /* Each product card occupies one-fourth of the available width */
+    float: left; /* Float the product cards to display them side by side */
+    box-sizing: border-box; /* Include padding and border in the element's total width and height */
+    padding: 10px; /* Add padding to the product cards */
+  }
+  
+  @media (max-width: 768px) {
+    .product-card {
+      width: 50%; /* On smaller screens, each product card occupies half of the available width */
+    }
+  }

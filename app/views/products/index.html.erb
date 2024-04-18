@@ -1,8 +1,15 @@
 <h1 class="title is-1">Products</h1>
-<ul>
-  <% @products.each do |product| %>
-    <li><%= link_to product.name, product_path(product) %></li>
-  <% end %>
-</ul>
 
-<%= paginate @products %>
+<div class="grid">
+  <div class="columns is-multiline">
+    <% @products.each do |product| %>
+      <div class="column is-one-quarter">
+        <%= render partial: 'product', locals: { product: product, show_link: true } %>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<nav class="pagination" role="navigation" aria-label="pagination">
+  <%= paginate @products %>
+</nav>
