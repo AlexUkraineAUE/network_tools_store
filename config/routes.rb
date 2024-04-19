@@ -18,19 +18,27 @@ Rails.application.routes.draw do
       get "search"
     end
   end
+
   resources :categories, only: [:index, :show]
+
   resources :order_items, only: [:index, :show]
+
   resources :products, only: [:index, :show] do
     collection do
       get "search"
     end
   end
+
   resources :customers, only: [:index, :show] do
     collection do
       get "search"
     end
   end
+
   resources :contacts, only: [:create]
+
+  resources :cart, only: [:create, :destroy]
+
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 

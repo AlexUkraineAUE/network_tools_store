@@ -14,31 +14,34 @@
       <p class="content">Category: <%= link_to product.category.name,product.category %></p>
     
       <p class="content">
-        Description: <br><%=product.description %>
+        Description: <%=product.description %>
       </p>
       <p class="content">
-        Price: <br><%= number_to_currency(product.price) %>
+        Price: <%= number_to_currency(product.price) %>
       </p>
       <p class="content"> 
         <% if product.discounted_price.present? %>
-            Discounted Price: <br><%= number_to_currency(product.discounted_price) %>
+            Discounted Price: <%= number_to_currency(product.discounted_price) %>
         <% else %>
         <% end %>
         </p>
-      <p class="content">
-        Quantity in stock: <br><%=product.quantity %>
-      </p>
 
+    
+
+      <div class="card-image">
+        <% if product.image.present? %>
+          <div class="card-image">
+              <figure class="image">
+              <%= image_tag product.image%> 
+              </figure>
+          </div>
+      <% end %>
+      </div>
+
+      <%= form_with url: cart_index_path, method: :post do%>
+      <%= hidden_field_tag(:id, product.id)%>
+        <%= button_tag "Add to cart ➕"%>
+      <% end %>
     </div>
-
-    <div class="card-image">
-      <% if product.image.present? %>
-        <div class="card-image">
-            <figure class="image">
-            <%= image_tag product.image%> 
-            </figure>
-        </div>
-    <% end %>
-     </div>
   </div>
 </div>
