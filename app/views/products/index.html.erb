@@ -1,4 +1,37 @@
-<h1 class="title is-1">Products</h1>
+<h1 class="title is-1">Available Products</h1>
+
+<nav class="panel">
+  <p class="panel-heading">Filter Products</p>
+  
+    <%= form_with(url: search_products_path, method: :get, local: true)  do %>
+      <div class= "panel-block"
+        <div class="control">
+            <%= text_field_tag(:keywords, nil, class: "input", placeholder: 'Search For Products') %>
+          </div>
+        <label class="panel-block">
+          <div class="select">
+            <%= collection_select(:category, :category_ids, Category.all, :id, :name, { prompt: "Select Category" }, class: "form-control") %>
+          </div>
+        </label>
+        <label class="panel-block">
+          <div class="field">
+            <%= check_box_tag(:on_sale, 1, params[:on_sale].present?) %>
+            <%= label_tag(:on_sale, "Display products on sale") %>
+          </div>
+        </label>
+        <label class="panel-block">
+          <div class="field">
+            <%= check_box_tag(:new_products, 1, params[:new_products].present?) %>
+            <%= label_tag(:new_products, "Display new products") %>
+          </div>
+        </label>
+        <div class="panel-block">
+          <%= submit_tag('Search', class: "button is-link is-outlined is-fullwidth")%>
+        </div>
+      </div>
+    <% end %>
+  
+</nav>
 
 <div class="grid">
   <div class="columns is-multiline">

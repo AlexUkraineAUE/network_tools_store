@@ -10,7 +10,17 @@ class ProductsController < ApplicationController
   end
 
   def search
-    @products = Product.where("name LIKE ?", "%#{params[:search_term]}%")
+    wildcard_search = "%#{params[:keywords]}%"
+    @products = Product.includes(:category).where("name LIKE ? OR description LIKE ?", wildcard_search, wildcard_search)
+    if params[:category].present? && params[:category][:category_ids].present?
+      @products = @products.where(category_id: params[:category][:category_ids])
+    end
+    @products = @products.where.not(discounted_price: nil) if params[:on_sale].present?
+
+    # Filter products that are new (added to the site within the past 3 days)
+    @products = @products.where("created_at >= ?", 3.days.ago) if params[:new_products].present?
+
+    @products = @products.page(params[:page]).per(12)
   end
 
   def permalink

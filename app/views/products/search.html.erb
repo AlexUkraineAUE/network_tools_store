@@ -1,10 +1,21 @@
-<p>
-  Found <%= pluralize(@products.size, 'result') %>
-  for the search term "<%= params[:search_term] %>".
+<p class="mb-5">
+  <% if @products.any? %>
+    Found <%= pluralize(@products.total_count, 'product') %>.
+  <% else %>
+    No products were found.
+  <% end %>
 </p>
 
-<div class="search-results columns is-multiline">
-  <%= render partial: 'products/product',
-             collection: @products,
-             locals: { show_link: true } %>
+<div class="grid">
+  <div class="columns is-multiline">
+    <% @products.each do |product| %>
+      <div class="column is-one-quarter">
+        <%= render partial: 'products/product', locals: { product: product, show_link: true } %>
+      </div>
+    <% end %>
+  </div>
 </div>
+
+<nav class="pagination" role="navigation" aria-label="pagination">
+  <%= paginate @products %>
+</nav>
