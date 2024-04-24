@@ -75,3 +75,10 @@ group :test do
   gem "capybara"
   gem "selenium-webdriver"
 end
+
+gem 'stripe'
+
+gem 'psych', '< 4'
+gem 'pry'
+gem 'pry-remote'
+gem 'pry-nav'
