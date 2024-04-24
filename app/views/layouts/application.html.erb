@@ -13,7 +13,38 @@
   </head>
 
   <body>
+    <header>
     <%= render 'common/menu' %>
+    </header>
+    <main>
+      <section>
+        <%= link_to image_tag("cart.jpg", width: 60), root_path%>
+        <details>
+          <summary>
+            Cart 
+            <% if cart.present?%>
+              <sup><%= cart.size%></sup>
+            <% end %>
+          </summary>
+          <% if cart.present?%>  
+            <ul>
+              <% cart.each do |product|%>
+              <li>
+              <%= product.name%> <%= button_to "❌", cart_path(product), method: :delete%>
+              </li>
+              <% end %>
+            </ul>
+            <% else %>
+              <p>No items in the cart.</p>
+          <% end%>
+        </details>
+      </section>
+      <% if flash[:notice] %>
+          <p>
+            <%= flash[:notice] %>
+          </p>
+        <% end %>
     <%= yield %>
+    </main>
   </body>
 </html>
