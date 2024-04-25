@@ -12,6 +12,7 @@ Rails.application.routes.draw do
   get 'about', to: 'pages#about'
   get 'home', to: 'home#index'
   get 'cart', to: 'cart#show'
+  get 'checkout', to: 'checkout#new'
 
   resources :orders, only: [:index, :show] do
     collection do
@@ -43,11 +44,7 @@ Rails.application.routes.draw do
 
 
 
-  scope '/checkout' do
-    post 'create', to: 'checkout#create', as: 'checkout_create'
-    get 'success', to: 'checkout#success', as: 'checkout_success'
-    get 'cancel', to: 'checkout#cancel', as: 'checkout_cancel'
-  end
+  resources :checkout, only: [:new, :create]
 
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html

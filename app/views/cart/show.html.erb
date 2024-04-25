@@ -34,6 +34,7 @@
         <% end %>
       </tbody>
     </table>
+    <%= link_to "Proceed to Checkout", new_checkout_path, class: "btn btn-primary" %>
   <% else %>
     <p>No items in the cart.</p>
   <% end %>

@@ -1,72 +1,36 @@
 class CheckoutController < ApplicationController
+  def new
+    @cart_products = Product.find(session[:shopping_cart])
+    @total_price = calculate_total_price(@cart_products)
+    @customer = Customer.new
+  end
+
   def create
-    @product = Product.find(params[:product_id])
-
-    if @product.nil?
-      redirect_to root_path
-      return
+    @customer = Customer.new(customer_params)
+    if @customer.save
+      @order = Order.create(customer_id: @customer.id)
+      @cart_products = Product.find(session[:shopping_cart])
+      @cart_products.each do |product|
+        OrderItem.create(order_id: @order.id, product_id: product.id, quantity: 1, subtotal: product.price)
+      end
+      session[:shopping_cart] = []
+      redirect_to order_path(@order), notice: "Order placed successfully!"
+    else
+      render :new
     end
-
-    unit_amount = @product.discounted_price.present? ? @product.discounted_price * 100 : @product.price * 100
-    quantity = params[:quantity].to_i # Get the quantity from the form
-
-    # Create a new checkout session with the product's information and selected quantity
-    @session = Stripe::Checkout::Session.create(
-      payment_method_types: ['card'],
-      success_url: checkout_success_url + "?session_id={CHECKOUT_SESSION_ID}",
-      cancel_url: checkout_cancel_url,
-      mode: 'payment',
-      line_items: [
-        {
-          quantity: quantity, # Use the selected quantity
-          price_data: {
-            unit_amount: unit_amount.to_i,
-            currency: "cad",
-            product_data: {
-              name: @product.name,
-              description: @product.description,
-            }
-          }
-        },
-        {
-          quantity: 1,
-          price_data: {
-            currency: "cad",
-            unit_amount: (unit_amount * 0.05).to_i,
-            product_data: {
-              name: "GST",
-              description: "Goods and Services Tax",
-            }
-          }
-        },
-        {
-          quantity: 1,
-          price_data: {
-            currency: "cad",
-            unit_amount: (unit_amount * 0.07).to_i,
-            product_data: {
-              name: "PST",
-              description: "Provincial Sales Tax",
-            }
-          }
-        }
-      ]
-    )
-
-    redirect_to @session.url, allow_other_host: true
-  rescue Stripe::StripeError => e
-    flash[:error] = e.message
-    redirect_to product_path(@product)
   end
 
-  def success
-    # we took the customer's money
-    @session = Stripe::Checkout::Session.retrieve(params[:session_id])
-    @payment_intent = Stripe::PaymentIntent.retrieve(@session.payment_intent)
+  private
+
+  def customer_params
+    params.require(:customer).permit(:first_name, :last_name, :email, :address, :city, :province, :postal_code)
   end
 
-  def cancel
-    # something went wrong with payment!
+  def calculate_total_price(cart_products)
+    total_price = 0
+    cart_products.each do |product|
+      total_price += product.price
+    end
+    total_price
   end
-
 end
