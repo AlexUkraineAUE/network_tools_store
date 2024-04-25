@@ -1,4 +1,4 @@
-<h1>Customers</h1>
+<h1 class="title is-1">Customers</h1>
 <ul>
   <% @customers.each do |customer| %>
     <li><%= link_to "#{customer.first_name} #{customer.last_name}", customer %></li>

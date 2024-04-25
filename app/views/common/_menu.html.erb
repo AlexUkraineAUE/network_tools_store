@@ -38,6 +38,16 @@
       <a class="navbar-item">
         <%= link_to 'Contact Us', contact_path %>
       </a>
+
+      <a class="navbar-item">
+        <%= link_to image_tag("cart.jpg", width: 40), cart_path%>
+        <summary>
+            <% if cart.present?%>
+              <sup><%= cart.size%></sup>
+            <% end %>
+        </summary>
+      </a>
+      
     </div>
   </div>
 </nav>

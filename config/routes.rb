@@ -12,6 +12,14 @@ Rails.application.routes.draw do
   get 'contact', to: 'pages#contact'
   get 'about', to: 'pages#about'
   get 'home', to: 'home#index'
+  post '/cart', to: 'carts#create', as: 'cart_add'
+
+  # Route for viewing the cart
+  get '/cart', to: 'carts#show', as: 'cart'
+
+  # Route for removing a product from the cart
+  delete '/cart/:id', to: 'carts#destroy', as: 'cart_remove'
+
 
   resources :orders, only: [:index, :show] do
     collection do
@@ -29,15 +37,18 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :products do
+    post 'add_to_cart', on: :member
+  end
+
   resources :customers, only: [:index, :show] do
     collection do
       get "search"
     end
   end
 
-  resources :contacts, only: [:create]
+  resources :cart, only: [:create, :destroy, :index]
 
-  resources :cart, only: [:create, :destroy]
 
   scope '/checkout' do
     post 'create', to: 'checkout#create', as: 'checkout_create'
