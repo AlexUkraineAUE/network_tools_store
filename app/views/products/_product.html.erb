@@ -11,42 +11,36 @@
     </div>
 
     <div class="card-content">
-      <p class="content">Category: <%= link_to product.category.name,product.category %></p>
+      <p class="content">Category: <%= link_to product.category.name, product.category %></p>
     
       <p class="content">
-        Description: <%=product.description %>
+        Description: <%= product.description %>
       </p>
       <p class="content">
         Price: <%= number_to_currency(product.price) %>
       </p>
-      <p class="content"> 
-        <% if product.discounted_price.present? %>
-            Discounted Price: <%= number_to_currency(product.discounted_price) %>
-        <% else %>
-        <% end %>
-        </p>
-
-    
+      <% if product.discounted_price.present? %>
+        <p class="content">Discounted Price: <%= number_to_currency(product.discounted_price) %></p>
+      <% end %>
 
       <div class="card-image">
-        <% if product.image.present? %>
+        <% if product.image.attached? %>
           <div class="card-image">
-              <figure class="image">
-              <%= image_tag product.image%> 
-              </figure>
+            <figure class="image">
+              <%= image_tag product.image %>
+            </figure>
           </div>
-      <% end %>
+        <% end %>
       </div>
-      <% if cart.include?(product)%>
-        <%= button_to cart_path(product), method: :delete do%>
-        Remove from cart
-        <% end %>
-      <%else%>
-        <%= form_with url: cart_index_path, method: :post do%>
-        <%= hidden_field_tag(:id, product.id)%>
-          <%= button_tag "Add to cart ➕"%>
-        <% end %>
-      <%end%>
+
+      <%= form_with url: checkout_create_path do |form| %>
+        <%= hidden_field_tag(:product_id, product.id) %>
+        <div class="field">
+          <%= form.label :quantity, "Quantity:" %>
+          <%= form.number_field :quantity, value: 1, min: 1, max: 100 %>
+        </div>
+        <%= button_tag 'Buy Now 💳' %>
+      <% end %>
     </div>
   </div>
 </div>
