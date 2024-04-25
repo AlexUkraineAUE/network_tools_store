@@ -3,7 +3,6 @@ Rails.application.routes.draw do
   devise_for :admin_users, ActiveAdmin::Devise.config
   ActiveAdmin.routes(self)
   root to: 'home#index'
-
   get 'orders', to: 'orders#index'
   get 'categories', to: 'categories#index'
   get 'products', to: 'products#index'
@@ -12,14 +11,7 @@ Rails.application.routes.draw do
   get 'contact', to: 'pages#contact'
   get 'about', to: 'pages#about'
   get 'home', to: 'home#index'
-  post '/cart', to: 'carts#create', as: 'cart_add'
-
-  # Route for viewing the cart
-  get '/cart', to: 'carts#show', as: 'cart'
-
-  # Route for removing a product from the cart
-  delete '/cart/:id', to: 'carts#destroy', as: 'cart_remove'
-
+  get 'cart', to: 'cart#show'
 
   resources :orders, only: [:index, :show] do
     collection do
@@ -37,17 +29,18 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :products do
-    post 'add_to_cart', on: :member
-  end
-
   resources :customers, only: [:index, :show] do
     collection do
       get "search"
     end
   end
 
-  resources :cart, only: [:create, :destroy, :index]
+  resources :contacts, only: [:create]
+
+  resources :cart, only: [:show, :create, :update, :destroy]
+  delete '/cart/:id', to: 'cart#destroy', as: 'delete_from_cart'
+  patch '/cart/:id', to: 'cart#update', as: 'update_cart'
+
 
 
   scope '/checkout' do

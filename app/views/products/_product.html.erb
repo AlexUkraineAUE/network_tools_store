@@ -34,13 +34,13 @@
       </div>
 
       <% if cart.include?(product) %>
-        <%= button_to cart_path(product), method: :delete do %>
-          Remove From Cart ❌
+        <%= button_to delete_from_cart_path(product), method: :delete do %>
+          Remove from cart ❌
         <% end %>
       <% else %>
-        <%= form_tag(cart_index_path, method: :post) do %>
-          <%= hidden_field_tag(:product_id, product.id) %>
-          <%= submit_tag 'Add to Cart ➕', class: 'button is-primary' %>
+        <%= form_with url: cart_path(product), method: :post do %>
+          <%= hidden_field_tag(:id, product.id) %>
+          <%= button_tag "Add to cart ➕" %>
         <% end %>
       <% end %>
     </div>
