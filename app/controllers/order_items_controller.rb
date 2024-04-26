@@ -1,5 +1,5 @@
 class OrderItemsController < ApplicationController
-  before_action :set_order_item, only: [:show, :edit, :update, :destroy]
+  before_action :set_order_item, only: %i[show edit update destroy]
 
   def index
     @order_items = OrderItem.all
@@ -24,7 +24,7 @@ class OrderItemsController < ApplicationController
   def create
     @order_item = OrderItem.new(order_item_params)
     if @order_item.save
-      redirect_to @order_item, notice: 'Order item was successfully created.'
+      redirect_to @order_item, notice: "Order item was successfully created."
     else
       render :new
     end
@@ -32,7 +32,7 @@ class OrderItemsController < ApplicationController
 
   def update
     if @order_item.update(order_item_params)
-      redirect_to @order_item, notice: 'Order item was successfully updated.'
+      redirect_to @order_item, notice: "Order item was successfully updated."
     else
       render :edit
     end
@@ -40,15 +40,16 @@ class OrderItemsController < ApplicationController
 
   def destroy
     @order_item.destroy
-    redirect_to order_items_url, notice: 'Order item was successfully destroyed.'
+    redirect_to order_items_url, notice: "Order item was successfully destroyed."
   end
 
   private
-    def set_order_item
-      @order_item = OrderItem.find(params[:id])
-    end
 
-    def order_item_params
-      params.require(:order_item).permit(:order_id, :product_id, :quantity, :subtotal)
-    end
+  def set_order_item
+    @order_item = OrderItem.find(params[:id])
+  end
+
+  def order_item_params
+    params.require(:order_item).permit(:order_id, :product_id, :quantity, :subtotal)
+  end
 end

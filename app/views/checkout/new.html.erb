@@ -1,4 +1,6 @@
 <h1>Checkout</h1>
+<%= link_to "Sign Up", new_user_registration_path %>
+<%= link_to "Log In", new_user_session_path %>
 
 <div>
   <% if @cart_products.present? %>
@@ -13,7 +15,7 @@
         <% @cart_products.each do |product| %>
           <tr>
             <td><%= product.name %></td>
-            <td><%= number_to_currency(product.price) %></td>
+            <td><%= number_to_currency((product.discounted_price.present? ? product.discounted_price : product.price) * @cart_item_quantities[product.id]) %></td>
           </tr>
         <% end %>
       </tbody>
@@ -57,7 +59,10 @@
         <%= form.text_field :postal_code %>
       </div>
 
-      <%= form.submit "Place Order" %>
+      <%= form_with url: checkout_create_checkout_session_path, remote: true do %>
+        <%= hidden_field_tag(:product_id, product.id) %>
+        <%= button_tag 'Place Order 💵' %>
+      <% end %>
     <% end %>
   <% else %>
     <p>No items in the cart.</p>

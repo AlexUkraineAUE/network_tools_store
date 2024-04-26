@@ -15,7 +15,7 @@
       <tbody>
         <% @cart_products.each do |product| %>
           <tr>
-            <td><%= product.name %></td>
+            <td><%= link_to product.name, product %></td>
             <td>
               <%= form_with url: update_cart_path(product), method: :patch do %>
                 <%= hidden_field_tag(:id, product.id) %>
@@ -23,18 +23,25 @@
                 <%= submit_tag "Update" %>
               <% end %>
             </td>
-            <td><%= number_to_currency(product.price) %></td>
-            <td><%= number_to_currency(product.price * @cart_item_quantities[product.id]) %></td>
+            <td><%= number_to_currency(product.discounted_price.present? ? product.discounted_price : product.price) %></td>
+            <td><%= number_to_currency((product.discounted_price.present? ? product.discounted_price : product.price) * @cart_item_quantities[product.id]) %></td>
             <td>
               <%= button_to delete_from_cart_path(product), method: :delete, data: { confirm: 'Are you sure?' } do %>
                 Remove
               <% end %>
             </td>
           </tr>
+          <%= hidden_field_tag("product_quantity[#{product.id}]", @cart_item_quantities[product.id]) %>
         <% end %>
       </tbody>
     </table>
-    <%= link_to "Proceed to Checkout", new_checkout_path, class: "btn btn-primary" %>
+    <%= form_with url: checkout_create_path, remote: true, data: { turbo: false } do %>
+      <%= hidden_field_tag(:shopping_cart, session[:shopping_cart]) %>
+      <% @cart_products.each do |product| %>
+        <%= hidden_field_tag("product_quantity[#{product.id}]", @cart_item_quantities[product.id]) %>
+      <% end %>
+      <%= button_tag 'Buy Now' %>
+    <% end %>
   <% else %>
     <p>No items in the cart.</p>
   <% end %>

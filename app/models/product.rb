@@ -8,11 +8,12 @@ class Product < ApplicationRecord
   validates :name, uniqueness: true
   validates :price, numericality: { greater_than_or_equal_to: 0 }
 
-  def self.ransackable_attributes(auth_object = nil)
-    ["category_id", "created_at", "description", "id", "id_value", "name", "price", "quantity", "updated_at"]
+  def self.ransackable_attributes(*)
+    ["category_id", "created_at", "description", "id", "id_value", "name", "price", "quantity",
+     "updated_at"]
   end
 
-  def self.ransackable_associations(auth_object = nil)
+  def self.ransackable_associations(*)
     ["category", "order_items", "orders"]
   end
 end

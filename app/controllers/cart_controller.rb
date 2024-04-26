@@ -10,7 +10,6 @@ class CartController < ApplicationController
   end
 
   def destroy
-
     id = params[:id].to_i
     session[:shopping_cart].delete(id)
     product = Product.find(id)
@@ -19,6 +18,8 @@ class CartController < ApplicationController
   end
 
   def show
+    @cart = cart
+    @total = 0
     @cart_products = Product.find(session[:shopping_cart])
 
     @cart_item_quantities = {}
@@ -39,5 +40,4 @@ class CartController < ApplicationController
 
     redirect_to cart_path, notice: "Quantity updated successfully"
   end
-
 end

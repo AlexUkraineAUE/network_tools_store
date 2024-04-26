@@ -1,5 +1,5 @@
 class ProductsController < ApplicationController
-  before_action :set_product, only: [:show, :edit, :update, :destroy]
+  before_action :set_product, only: %i[show edit update destroy]
 
   def index
     @products = Product.page(params[:page]).per(12)
@@ -14,7 +14,8 @@ class ProductsController < ApplicationController
 
   def search
     wildcard_search = "%#{params[:keywords]}%"
-    @products = Product.includes(:category).where("name LIKE ? OR description LIKE ?", wildcard_search, wildcard_search)
+    @products = Product.includes(:category).where("name LIKE ? OR description LIKE ?",
+                                                  wildcard_search, wildcard_search)
     if params[:category].present? && params[:category][:category_ids].present?
       @products = @products.where(category_id: params[:category][:category_ids])
     end
@@ -41,7 +42,7 @@ class ProductsController < ApplicationController
   def create
     @product = Product.new(product_params)
     if @product.save
-      redirect_to @product, notice: 'Product was successfully created.'
+      redirect_to @product, notice: "Product was successfully created."
     else
       render :new
     end
@@ -49,7 +50,7 @@ class ProductsController < ApplicationController
 
   def update
     if @product.update(product_params)
-      redirect_to @product, notice: 'Product was successfully updated.'
+      redirect_to @product, notice: "Product was successfully updated."
     else
       render :edit
     end
@@ -57,15 +58,16 @@ class ProductsController < ApplicationController
 
   def destroy
     @product.destroy
-    redirect_to products_url, notice: 'Product was successfully destroyed.'
+    redirect_to products_url, notice: "Product was successfully destroyed."
   end
 
   private
-    def set_product
-      @product = Product.find(params[:id])
-    end
 
-    def product_params
-      params.require(:product).permit(:name, :description, :price, :category_id)
-    end
+  def set_product
+    @product = Product.find(params[:id])
+  end
+
+  def product_params
+    params.require(:product).permit(:name, :description, :price, :category_id)
+  end
 end

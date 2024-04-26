@@ -1,8 +1,17 @@
 Rails.application.routes.draw do
+  devise_for :customers
+  resources :customers
 
   devise_for :admin_users, ActiveAdmin::Devise.config
   ActiveAdmin.routes(self)
+
   root to: 'home#index'
+
+  get 'users/user_page'
+  get 'users/sign_up'
+  get 'users/login'
+  get 'sign_up/login'
+  get 'products/search'
   get 'orders', to: 'orders#index'
   get 'categories', to: 'categories#index'
   get 'products', to: 'products#index'
@@ -36,15 +45,21 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :contacts, only: [:create]
-
   resources :cart, only: [:show, :create, :update, :destroy]
   delete '/cart/:id', to: 'cart#destroy', as: 'delete_from_cart'
   patch '/cart/:id', to: 'cart#update', as: 'update_cart'
+  post '/checkout/contact', to: 'cart#checkout_contact', as: 'checkout_contact'
 
+  unless Rails.application.routes.named_routes[:new_user]
+    get 'checkout/new_user', to: 'checkout#new_user', as: 'new_user'
+  end
 
+  scope "/checkout" do
+    post "create", to: "checkout#create", as: "checkout_create"
+    get "success", to: "checkout#success", as: "checkout_success"
+    get "cancel", to: "checkout#cancel", as: "checkout_cancel"
 
-  resources :checkout, only: [:new, :create]
+  end
 
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html

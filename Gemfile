@@ -83,3 +83,6 @@ gem 'psych', '< 4'
 gem 'pry'
 gem 'pry-remote'
 gem 'pry-nav'
+
+gem 'rubocop'
+gem 'rubocop-rails'
